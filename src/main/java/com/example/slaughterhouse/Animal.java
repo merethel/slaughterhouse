@@ -9,11 +9,11 @@ import java.util.Date;
 public class Animal {
     private @Id @GeneratedValue Long registrationNumber;
     public int weight;
-    public Date date;
+    public String date;
     public String origin;
 
     public Animal(){}
-    Animal(int weight, Date date, String origin) {
+    Animal(int weight, String date, String origin) {
         this.weight = weight;
         this.date = date;
         this.origin = origin;
@@ -23,7 +23,7 @@ public class Animal {
         return weight;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
@@ -39,7 +39,7 @@ public class Animal {
         this.weight = weight;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 

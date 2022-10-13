@@ -15,8 +15,8 @@ class LoadDatabase {
     @Bean
     CommandLineRunner initDatabase(AnimalRepository repository){
         return args -> {
-            repository.save(new Animal(40, new Date(2021,11,24),  "Danskerland"));
-            repository.save(new Animal(20, new Date(2021,1,1),  "Svenskerland"));
+            repository.save(new Animal(40, "24-12-2022",  "Danskerland"));
+            repository.save(new Animal(20, "1-1-2021",  "Svenskerland"));
 
             repository.findAll().forEach(employee -> log.info("Preloaded " + employee));
             };

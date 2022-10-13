@@ -27,13 +27,25 @@ class AnimalController {
     // Aggregate root
     // tag::get-aggregate-root[]
 
+    // 7animals
+    // /animals?origin=Horsens
     @GetMapping("/animals")
+    CollectionModel<EntityModel<Animal>> getAnimals(@RequestParam(value = "origin", required = false) String origin, @RequestParam(value = "date", required = false) String date) {
+        if(origin!=null) {
+            return getByOrigin(origin);
+        }
+        else if(date != null){
+            return getByDate(date);
+        }
+        else return all();
+    }
+
     CollectionModel<EntityModel<Animal>> all(){
-        List<EntityModel<Animal>> employees = repository.findAll().stream() //
+        List<EntityModel<Animal>> animals = repository.findAll().stream() //
                 .map(assembler::toModel) //
                 .collect(Collectors.toList());
 
-        return CollectionModel.of(employees, linkTo(methodOn(AnimalController.class).all()).withSelfRel());
+        return CollectionModel.of(animals, linkTo(methodOn(AnimalController.class).all()).withSelfRel());
     }
 
     @GetMapping("/animals/{registrationNumber}")
@@ -55,16 +67,24 @@ class AnimalController {
                 .body(entityModel);
     }
 
-    @GetMapping
-    CollectionModel<EntityModel<Animal>> getByOrigin(@RequestParam(value = "origin", required = false) String origin) {
-        List<EntityModel<Animal>> animals = repository.findAll().stream() //
-                .map(assembler::toModel) //
+    CollectionModel<EntityModel<Animal>> getByOrigin(String origin) {
+        List<EntityModel<Animal>> animals = repository.findAll().stream()
+                .map(assembler::toModel)
                 .filter(animal -> animal.getContent().getOrigin().equals(origin))
                 .collect(Collectors.toList());
 
         return CollectionModel.of(animals, linkTo(methodOn(getClass()).getByOrigin(origin)).withSelfRel());
     }
 
+
+    CollectionModel<EntityModel<Animal>> getByDate(String date) {
+        List<EntityModel<Animal>> animals = repository.findAll().stream()
+                .map(assembler::toModel)
+                .filter(animal -> animal.getContent().getDate().equals(date))
+                .collect(Collectors.toList());
+
+        return CollectionModel.of(animals, linkTo(methodOn(getClass()).getByDate(date)).withSelfRel());
+    }
 }
 
 
